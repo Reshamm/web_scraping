@@ -2,6 +2,9 @@ import os.path
 from selenium.webdriver import Chrome, ChromeOptions
 import time
 import pandas as pd
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+
 
 ### Chromeを起動する関数
 def set_driver(driver_path,headless_flg):
@@ -35,7 +38,14 @@ def login(driver_data):
 def read_data():
     # calling login function.
     driver = login('chromedriver.exe')
-    time.sleep(30)
+    driver.implicitly_wait(20)
+    # time.sleep(10)
+
+    # wait = WebDriverWait(driver, 10)
+    # wait.until_not(expected_conditions.title_contains('求人広告を掲載する'))
+
+    # wait = WebDriverWait(driver, 10)
+    # wait_csv_read = wait.until(expected_conditions.viibility_of_element_by_id(('JobTitle')))
 
     # read csv file of job detail
     csv_data = pd.read_csv('test_data1.csv', encoding="shift-jis")
