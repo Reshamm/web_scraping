@@ -51,7 +51,7 @@ def login():
     # apply_email = csv_data.mada
     # apply_phone = csv_data.mada
 
-    ### page 1 data entry
+    ### ----------page 1 data entry----------
     # job title
     job_name = driver.find_element_by_id('JobTitle')
     job_name.clear()
@@ -88,14 +88,32 @@ def login():
 
     time.sleep(5)
 
-    ### page 2 data entry
+    ### ----------page 2 data entry----------
     # get job type(from radio buttons) ## this is not working yet and just given full time only 
     # 今は手動で渡している　※やり方分からなかった
-    btn_select_job_type = driver.find_element_by_id('label-FULLTIME')
-    btn_select_job_type.click()
+    # btn_select_job_type = driver.find_element_by_id('label-FULLTIME')
+    # btn_select_job_type.click()
+
+    
+    if job_style[count] == '正社員':
+        btn_select_job_type = driver.find_element_by_id('label-FULLTIME')
+        btn_select_job_type.click()
+    elif job_style[count] == 'アルバイト．パート':
+        btn_select_job_type = driver.find_element_by_id('label-PARTTIME')
+        btn_select_job_type.click()
+    elif job_style[count] == '派遣社員':
+        btn_select_job_type = driver.find_element_by_id('label-TEMPORARY')
+        btn_select_job_type.click()
+    elif job_style[count] == 'インターン':
+        btn_select_job_type = driver.find_element_by_id('label-CONTRACT')
+        btn_select_job_type.click()
+
+
+
+
 
     # salary range
-    # 以下もcsvぁｒ読み込むときエラーになったので一旦手動で渡しています。
+    # 以下もcsvから読み込むときエラーになったので一旦手動で渡しています。
     start_salary = driver.find_element_by_id('salary1')
     start_salary.clear()
     start_salary.send_keys('300000')
@@ -165,7 +183,7 @@ def login():
     btn_confirm = driver.find_element_by_xpath('//*[@id="confirm-button-in-preview"]')
     btn_confirm.click()
 
-    time.sleep(5)
+    time.sleep(10)
 
     # post_without_payment = driver.find_element_by_xpath('//*[@id="uniqueId1"]')
     # post_without_payment.click()
