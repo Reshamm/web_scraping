@@ -31,7 +31,7 @@ def set_driver(driver_path,headless_flg):
 def login(driver_data):
     driver = set_driver(driver_data,False)
     # Webサイトを開く
-    driver.get("https://secure.indeed.com/account/login?service=draw&hl=ja&co=JP&continue=https%3A%2F%2Femployers.indeed.com%2Fp%3Ftoken%3D")
+    driver.get("URL HERE")
     return driver
 
 
