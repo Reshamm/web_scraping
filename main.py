@@ -2,7 +2,6 @@ import os.path
 from selenium.webdriver import Chrome, ChromeOptions
 import time
 import pandas as pd
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
@@ -37,27 +36,25 @@ def login(driver_data):
 
 
 ### csv reader function.
-def read_data():
-
+def scrape_data():
     # calling login function.
     driver = login('chromedriver.exe')
+    # get the title of the top page(login page).
     title = driver.title
-    print(title)
-    # time.sleep(30)
+
+    # read csv file of job detail
+    csv_data = pd.read_csv('test_data1.csv', encoding="shift-jis")
+    count = 0  # counter for rows in csv file(initial row 0).
+
+    # csv data for receiving email and phone number to call from the job seeker.
+    recruiter_detail = pd.read_csv('sample.csv')
+    first_row = 0
+    email = recruiter_detail.email_address
+    phone = recruiter_detail.phone_number
 
     try:
-        wait = WebDriverWait(driver, 30)
+        wait = WebDriverWait(driver, 600)
         wait.until_not(expected_conditions.title_is(title))
-
-        # read csv file of job detail
-        csv_data = pd.read_csv('test_data1.csv', encoding="shift-jis")
-        count = 0  # counter for rows in csv file(initial row 0).
-
-        # csv data for receiving email and phone number to call from the job seeker.
-        recruiter_detail = pd.read_csv('sample.csv')
-        first_row = 0
-        email = recruiter_detail.email_address
-        phone = recruiter_detail.phone_number
 
         # added from here(count the number of rows in csv file).
         get_row_column = csv_data.shape
@@ -165,23 +162,8 @@ def read_data():
             job_description = driver.find_element_by_id('description-editorJOB_DESCRIPTION_ifr')
             job_description.send_keys(description[count])
             time.sleep(5)
-            #　以下は今オプショナルとして使ていない
-            # job_appeal_point = driver.find_element_by_id('description-editorEMPLOYER_MESSAGE_ifr')
-            # job_appeal_point.send_keys('best job ever!!')
 
-            # job_hour = driver.find_element_by_id('description-editorSHIFT_ifr')
-            # job_hour.send_keys('this is a week day job from 9am to 17pm')
-
-            # job_place = driver.find_element_by_id('description-editorWORK_LOCATION_ifr')
-            # job_place.send_keys('this is a work in saitama area.')
-
-            # job_welfare = driver.find_element_by_id('description-editorBENEFITS_ifr')
-            # job_welfare.send_keys('bonus 2 times a year.')
-
-            # job_other_info = driver.find_element_by_id('description-editorOTHER_ifr')
-            # job_other_info.send_keys('you can do remote work as well.')
-
-            # fontinue button
+            # continue button
             btn_continue = driver.find_element_by_xpath('//*[@id="sheet-next-button"]/span/a')
             btn_continue.click()
             time.sleep(5)
@@ -217,7 +199,8 @@ def read_data():
             time.sleep(5)
             # increment for the row number in csv file.
             count += 1
-        
+        # print("completed posts: " + count)    
+    
     except TimeoutException as e:
         print('You got timeout error.')
         driver.close()
@@ -225,7 +208,7 @@ def read_data():
 
 ### main 処理
 def main():
-    read_data()
+    scrape_data()
 
 
 if __name__ == "__main__":
